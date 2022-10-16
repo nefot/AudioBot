@@ -1,29 +1,29 @@
 import os
-
 import keyboard
-import keyboard as kb
 
-import cfg
-from win32com.client import Dispatch, GetActiveObject, GetObject
-from comtypes.client import CreateObject
-import tts
-import stt
+from src import stt, tts
+from win32com.client import Dispatch
 from fuzzywuzzy import fuzz
+from src import config as cfg
 
 
 
 
 
-print(f'Голосовой помощник{ cfg.VAP_name} версии { cfg.VAP_ver} готов нести службу')
 
+
+
+print(f'Голосовой помощник{cfg.VAP_NAME} версии {cfg.VAP_VERSION} готов нести службу')
 x = "+"
+
+
 def va_respond(voice: str):
     print(voice)
-    if voice.startswith(cfg.Pak_allias):
+    if voice.startswith(cfg.PACK_ALIAS):
         # обращаются к ассистенту
         cmd = recognize_cmd(filter_cmd(voice))
 
-        if cmd['cmd'] not in cfg.Pak_commandlist.keys():
+        if cmd['cmd'] not in cfg.PACK_COMMAND_LIST.keys():
             tts.va_speak("")
         else:
             execute_cmd(cmd['cmd'])
@@ -35,13 +35,15 @@ def filter_cmd(raw_voice: str):
     for x in cfg.Pak_allias:
         cmd = cmd.replace(x, "").strip()
 
-    for x in cfg.VAP_TBR:
+    for x  in cfg.VAP_TBR:
         cmd = cmd.replace(x, "").strip()
 
     return cmd
+
+
 def recognize_cmd(cmd: str):
     rc = {'cmd': '', 'percent': 0}
-    for c, v in cfg.Pak_commandlist.items():
+    for c, v in cfg.PACK_COMMAND_LIST.items():
 
         for x in v:
             vrt = fuzz.ratio(cmd, x)
@@ -50,6 +52,8 @@ def recognize_cmd(cmd: str):
                 rc['percent'] = vrt
 
     return rc
+
+
 def execute_cmd(cmd: str):
     if cmd == 'help':
         text = "Я умею: ..."
@@ -118,5 +122,6 @@ def execute_cmd(cmd: str):
         keyboard.send('z')
     elif cmd == 'scale':
         keyboard.send('z')
+
 
 stt.va_listen(va_respond)

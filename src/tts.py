@@ -5,7 +5,7 @@ import time
 language = 'ru'
 model_id = 'ru_v3'
 sample_rate = 48000 # 48000
-speaker = 'kseniya' # aidar, baya, kseniya, xenia, random
+speaker = 'kseniya' # aider, baya, kseniya, xenia, random
 put_accent = True
 put_yo = True
 device = torch.device('cpu') # cpu или gpu
