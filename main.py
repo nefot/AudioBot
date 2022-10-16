@@ -6,12 +6,18 @@ from fuzzywuzzy import fuzz
 from win32com.client import Dispatch
 from module import cfg, tts
 
-print(f'Голосовой помощник{cfg.VAP_name} версии {cfg.VAP_ver} готов нести службу')
-
 x = "+"
+path = 'C:\Program Files\Adobe\Adobe Photoshop 2020\Photoshop.exe'
 
 
+# Find_Photoshop("C:\Program Files")
 def subprocess_setup(process: str):
+    """
+    Setup the subprocess
+    :param process:
+    :return: приложение
+    """
+
     try:
         app = Dispatch(process)
         return app
@@ -67,7 +73,8 @@ def execute_cmd(cmd: str):
 
     elif cmd == 'openPS':
         speak = 'Открыла'
-        threading.Thread(target=os.startfile('C:\Program Files\Adobe\Adobe Photoshop 2020\Photoshop.exe'))
+
+        threading.Thread(target=(os.startfile(path)))
 
         tts.va_speak(speak)
 
@@ -80,7 +87,7 @@ def execute_cmd(cmd: str):
         layerRef = docRef.ArtLayers.Add()
 
     elif cmd == 'CTRLC':
-        threading.Thread(target= keyboard.send('ctrl+c'))
+        threading.Thread(target=keyboard.send('ctrl+c'))
 
     elif cmd == 'TextLayer':
         app = subprocess_setup("Photoshop.Application")
@@ -131,4 +138,8 @@ def execute_cmd(cmd: str):
         keyboard.send('z')
 
 
-threading.Thread(target = stt.va_listen(va_respond))
+if __name__ == "__main__":
+    # print(*passage('photoshop.exe', 'C:\Program Files'))
+    print(f'Голосовой помощник{cfg.VAP_name} версии {cfg.VAP_ver} готов нести службу\n',
+          "чтобы выйти нажмите Ctrl+Q")
+    threading.Thread(target=stt.va_listen(va_respond))

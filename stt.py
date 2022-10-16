@@ -1,3 +1,4 @@
+import keyboard
 import vosk
 import sys
 import sounddevice as sd
@@ -24,5 +25,8 @@ def va_listen(callback):
         rec = vosk.KaldiRecognizer(model, samplerate)
         while True:
             data = q.get()
-            if rec.AcceptWaveform(data):
+
+            if keyboard.is_pressed('Ctrl + Q'):
+                quit()
+            elif rec.AcceptWaveform(data):
                 callback(json.loads(rec.Result())["text"])
