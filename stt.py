@@ -18,7 +18,7 @@ def q_callback(indata, frames, time, status):
 
 
 def va_listen(callback):
-    with sd.RawInputStream(samplerate=samplerate, blocksize=8000, device=device, dtype='int16',
+    with sd.RawInputStream(samplerate=samplerate, blocksize=800, device=device, dtype='int16',
                            channels=1, callback=q_callback):
 
         rec = vosk.KaldiRecognizer(model, samplerate)

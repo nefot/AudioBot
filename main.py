@@ -1,15 +1,22 @@
 import os
 import keyboard
 import stt
-
+import threading
 from fuzzywuzzy import fuzz
 from win32com.client import Dispatch
 from module import cfg, tts
 
-
 print(f'Голосовой помощник{cfg.VAP_name} версии {cfg.VAP_ver} готов нести службу')
 
 x = "+"
+
+
+def subprocess_setup(process: str):
+    try:
+        app = Dispatch(process)
+        return app
+    except Exception as e:
+        print(e)
 
 
 def va_respond(voice: str):
@@ -56,22 +63,27 @@ def execute_cmd(cmd: str):
         text += "создовать холсты ..."
         text += "и слои"
         text += "а также отменять действия"
-        tts.va_speak(text)
+        threading.Thread(target=tts.va_speak(text))
+
     elif cmd == 'openPS':
-        speak = 'Открываю'
+        speak = 'Открыла'
+        threading.Thread(target=os.startfile('C:\Program Files\Adobe\Adobe Photoshop 2020\Photoshop.exe'))
+
         tts.va_speak(speak)
-        os.startfile('C:\Program Files\Adobe\Adobe Photoshop 2020\Photoshop.exe')
+
     elif cmd == 'holst':
         keyboard.send('ctrl+n')
     elif cmd == 'New_Layer':
-        app = Dispatch("Photoshop.Application")
+        app = subprocess_setup("Photoshop.Application")
+
         docRef = app.Application.ActiveDocument
         layerRef = docRef.ArtLayers.Add()
 
     elif cmd == 'CTRLC':
-        keyboard.send('ctrl+c')
+        threading.Thread(target= keyboard.send('ctrl+c'))
+
     elif cmd == 'TextLayer':
-        app = Dispatch("Photoshop.Application")
+        app = subprocess_setup("Photoshop.Application")
 
         app.Preferences.RulerUnits = 2
         app.Preferences.TypeUnits = 5
@@ -119,4 +131,4 @@ def execute_cmd(cmd: str):
         keyboard.send('z')
 
 
-stt.va_listen(va_respond)
+threading.Thread(target = stt.va_listen(va_respond))
