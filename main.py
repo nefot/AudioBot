@@ -1,29 +1,24 @@
 import os
 import keyboard
+import stt
 
-from src import stt, tts
-from win32com.client import Dispatch
 from fuzzywuzzy import fuzz
-from src import config as cfg
+from win32com.client import Dispatch
+from module import cfg, tts
 
 
+print(f'Голосовой помощник{cfg.VAP_name} версии {cfg.VAP_ver} готов нести службу')
 
-
-
-
-
-
-print(f'Голосовой помощник{cfg.VAP_NAME} версии {cfg.VAP_VERSION} готов нести службу')
 x = "+"
 
 
 def va_respond(voice: str):
     print(voice)
-    if voice.startswith(cfg.PACK_ALIAS):
+    if voice.startswith(cfg.Pak_allias):
         # обращаются к ассистенту
         cmd = recognize_cmd(filter_cmd(voice))
 
-        if cmd['cmd'] not in cfg.PACK_COMMAND_LIST.keys():
+        if cmd['cmd'] not in cfg.Pak_commandlist.keys():
             tts.va_speak("")
         else:
             execute_cmd(cmd['cmd'])
@@ -35,7 +30,7 @@ def filter_cmd(raw_voice: str):
     for x in cfg.Pak_allias:
         cmd = cmd.replace(x, "").strip()
 
-    for x  in cfg.VAP_TBR:
+    for x in cfg.VAP_TBR:
         cmd = cmd.replace(x, "").strip()
 
     return cmd
@@ -43,7 +38,7 @@ def filter_cmd(raw_voice: str):
 
 def recognize_cmd(cmd: str):
     rc = {'cmd': '', 'percent': 0}
-    for c, v in cfg.PACK_COMMAND_LIST.items():
+    for c, v in cfg.Pak_commandlist.items():
 
         for x in v:
             vrt = fuzz.ratio(cmd, x)
@@ -65,7 +60,7 @@ def execute_cmd(cmd: str):
     elif cmd == 'openPS':
         speak = 'Открываю'
         tts.va_speak(speak)
-        os.startfile('C:\Program Files (x86)\Photoshop19\App\Ps\Photoshop.exe')
+        os.startfile('C:\Program Files\Adobe\Adobe Photoshop 2020\Photoshop.exe')
     elif cmd == 'holst':
         keyboard.send('ctrl+n')
     elif cmd == 'New_Layer':

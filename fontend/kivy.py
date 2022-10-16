@@ -10,7 +10,7 @@ Config.set('graphics', 'height', '200')
 
 class MyApp(App):
     def build(self):
-        return Button(text="Нажми, чтобы запустить помощнка!!",
+        return Button(text="Нажми, чтобы запустить помощника!!",
                       font_size=30,
                       on_press=self.btn_press,
                       background_color=[0, 0.8, 1, 2],
