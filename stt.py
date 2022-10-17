@@ -1,11 +1,29 @@
-import keyboard
-import vosk
-import sys
-import sounddevice as sd
-import queue
 import json
+import os.path
+import queue
+import sys
 
-model = vosk.Model("small_model")
+import sounddevice as sd
+import vosk
+
+
+def Find_Model():
+    if os.path.exists("small_model"):
+        print("tiny_model is successfully")
+        return "tiny_model"
+    elif os.path.exists("large_model"):
+        print("large_model is successfully")
+        return "large_model"
+    elif os.path.exists("tiny_model"):
+        print("tiny_model is successfully")
+        return "tiny_model"
+    elif os.path.exists('model'):
+        print("model is successfully")
+        return "model"
+
+
+MOD = "small_model"
+model = vosk.Model(MOD) if os.path.exists(MOD) else vosk.Model(Find_Model())
 samplerate = 16000
 device = 1
 
@@ -26,7 +44,5 @@ def va_listen(callback):
         while True:
             data = q.get()
 
-            if keyboard.is_pressed('Ctrl + Q'):
-                quit()
-            elif rec.AcceptWaveform(data):
+            if rec.AcceptWaveform(data):
                 callback(json.loads(rec.Result())["text"])

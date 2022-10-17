@@ -1,23 +1,35 @@
+import json
 import os
-import keyboard
-import stt
 import threading
+
+import keyboard
 from fuzzywuzzy import fuzz
 from win32com.client import Dispatch
+
+import stt
 from module import cfg, tts
 
-x = "+"
-path = 'C:\Program Files\Adobe\Adobe Photoshop 2020\Photoshop.exe'
+
+path = "C:\\Program Files\\Adobe\\Adobe Photoshop 2020\\Photoshop.exe"
 
 
-# Find_Photoshop("C:\Program Files")
+def read_json():
+    """
+    Метод читает файл json
+    :return: возвращает путь обьекта
+    """
+    with open('config_.json', 'r', encoding='utf-8') as file:
+        stock = json.load(file)
+        print(json.dumps(stock,
+                         sort_keys=False,
+                         indent=4,
+                         ensure_ascii=False,
+                         separators=(',', ': ')))
+
+    # Find_Photoshop("C:\Program Files")
+
+
 def subprocess_setup(process: str):
-    """
-    Setup the subprocess
-    :param process:
-    :return: приложение
-    """
-
     try:
         app = Dispatch(process)
         return app
@@ -26,15 +38,11 @@ def subprocess_setup(process: str):
 
 
 def va_respond(voice: str):
-    print(voice)
     if voice.startswith(cfg.Pak_allias):
         # обращаются к ассистенту
         cmd = recognize_cmd(filter_cmd(voice))
-
-        if cmd['cmd'] not in cfg.Pak_commandlist.keys():
-            tts.va_speak("")
-        else:
-            execute_cmd(cmd['cmd'])
+        tts.va_speak("") if cmd['cmd'] not in cfg.Pak_commandlist.keys() \
+            else execute_cmd(cmd['cmd'])
 
 
 def filter_cmd(raw_voice: str):
@@ -66,7 +74,7 @@ def execute_cmd(cmd: str):
     if cmd == 'help':
         text = "Я умею: ..."
         text += "открывать фотошоп ..."
-        text += "создовать холсты ..."
+        text += "создавать холсты ..."
         text += "и слои"
         text += "а также отменять действия"
         threading.Thread(target=tts.va_speak(text))
@@ -139,6 +147,7 @@ def execute_cmd(cmd: str):
 
 
 if __name__ == "__main__":
+    read_json()
     # print(*passage('photoshop.exe', 'C:\Program Files'))
     print(f'Голосовой помощник{cfg.VAP_name} версии {cfg.VAP_ver} готов нести службу\n',
           "чтобы выйти нажмите Ctrl+Q")
