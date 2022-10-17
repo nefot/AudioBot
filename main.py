@@ -9,14 +9,13 @@ from win32com.client import Dispatch
 import stt
 from module import cfg, tts
 
-
 path = "C:\\Program Files\\Adobe\\Adobe Photoshop 2020\\Photoshop.exe"
 
 
 def read_json():
     """
     Метод читает файл json
-    :return: возвращает путь обьекта
+    :return: возвращает путь объекта
     """
     with open('config_.json', 'r', encoding='utf-8') as file:
         stock = json.load(file)
@@ -38,11 +37,15 @@ def subprocess_setup(process: str):
 
 
 def va_respond(voice: str):
+    print(voice)
     if voice.startswith(cfg.Pak_allias):
         # обращаются к ассистенту
         cmd = recognize_cmd(filter_cmd(voice))
-        tts.va_speak("") if cmd['cmd'] not in cfg.Pak_commandlist.keys() \
-            else execute_cmd(cmd['cmd'])
+
+        if cmd['cmd'] not in cfg.Pak_commandlist.keys():
+            tts.va_speak("")
+        else:
+            execute_cmd(cmd['cmd'])
 
 
 def filter_cmd(raw_voice: str):
@@ -53,7 +56,7 @@ def filter_cmd(raw_voice: str):
 
     for x in cfg.VAP_TBR:
         cmd = cmd.replace(x, "").strip()
-
+    print(cmd, 'cmd')
     return cmd
 
 
