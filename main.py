@@ -1,12 +1,10 @@
 import json
 import os
 import threading
-
+import stt
 import keyboard
 from fuzzywuzzy import fuzz
 from win32com.client import Dispatch
-
-import stt
 from module.tts import TTSpeaker
 
 path = "C:\\Program Files\\Adobe\\Adobe Photoshop 2020\\Photoshop.exe"
@@ -18,15 +16,7 @@ def read_json():
         return json.load(file)
 
 
-def subprocess_setup(process: str) :
-    """
-    Метод производит запуск приложения в отдельном потоке
-    @return Результат выполнения
-    ---------------------------------------------------------
-                 ВНИМАНЕ МЕТОД НЕ ДОПИСАН И НЕ РАБОТАЕТ (ИДУТ СТРОИТЕЛЬНЫЕ РАБОТЫ)
-                            НЕ ПЫТАЙТЕСЬ ЕГО ВЫЗВАТЬ ИЛИ УДАЛИТЬ
-    ---------------------------------------------------------------
-    """
+def subprocess_setup(process: str):
     try:
         app = Dispatch(process)
         return app
@@ -39,7 +29,6 @@ def va_respond(voice: str):
     if voice.startswith(tuple(stocks["other"]["pack_atlas"])):
         # обращаются к ассистенту
         cmd = recognize_cmd(filter_cmd(voice))
-
         if cmd['cmd'] not in stocks["pack_command-list"].keys():
             model.load_bath("")
         else:
@@ -50,17 +39,12 @@ def filter_cmd(raw_voice: str):
     cmd = raw_voice
     for x in stocks["other"]["pack_atlas"]:
         cmd = cmd.replace(x, "").strip()  # форматирует строку
-
     for x in stocks["other"]["var_tbr"]:  # cfg.VAP_TBR:
         cmd = cmd.replace(x, "").strip()
     return cmd
 
 
 def recognize_cmd(cmd: str):
-    """
-    на вход подается
-    распознает команду(к примеру, если есть отличие на пару букв или если это другая форма одного слова)
-    """
     DICTIONARY_SIM = {'cmd': '', 'percent': 0}
     for CMD, v in stocks["pack_command-list"].items():
         for x in v:
@@ -69,14 +53,13 @@ def recognize_cmd(cmd: str):
                 # дальше в словарь записываются данные: КАКАЯ КОМАНДА И НА СКОЛЬКО ПОХОЖА
                 DICTIONARY_SIM['cmd'] = CMD
                 DICTIONARY_SIM['percent'] = SIMILARITY
-
     return DICTIONARY_SIM
 
 
 def execute_cmd(cmd: str):
     if cmd == 'help':
         text = "Йа умею: ..." + \
-               "аткрыв+ать фотош+оп ..." + \
+                "аткрыв+ать фотош+оп ..." + \
                "саздав+ать холст+ы ..." + "и  сла и ..." + \
                "а т++акже отменйать действийа"
 
@@ -104,7 +87,6 @@ def execute_cmd(cmd: str):
     elif cmd == 'text_layer':
         try:
             app = subprocess_setup("Photoshop.Application")
-            # pywintypes.com_error: (-2147417846, 'Фильтр сообщений выдал диагностику о занятости приложения.', None, None)
             app.Preferences.TypeUnits = 5
             app.displayDialogs = 3
             newTextLayer = app.Application.ActiveDocument.ArtLayers.Add()

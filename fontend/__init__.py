@@ -1,2 +1,2 @@
-from . import kivy
+from . import main_app
 
