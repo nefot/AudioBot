@@ -11,6 +11,7 @@ pip install vosk
 pip install torch==1.12.1 
 pip install --upgrade omegaconf 
 pip install numpy"
+pip install -U pyinstaller
 
 pip install tk
 

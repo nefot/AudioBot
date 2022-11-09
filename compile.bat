@@ -1,0 +1,1 @@
+pyinstaller --noconsole -F main.py
