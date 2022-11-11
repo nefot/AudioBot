@@ -7,7 +7,8 @@ from fuzzywuzzy import fuzz
 from win32com.client import Dispatch
 from module.tts import TTSpeaker
 
-path = "C:\\Program Files\\Adobe\\Adobe Photoshop 2020\\Photoshop.exe"
+
+path = "C:\Program Files (x86)\Photoshop19\App\Ps"
 stocks = {}
 
 
