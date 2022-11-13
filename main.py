@@ -1,10 +1,12 @@
 import json
 import os
 import threading
-import stt
+
 import keyboard
 from fuzzywuzzy import fuzz
 from win32com.client import Dispatch
+
+import stt
 from module.tts import TTSpeaker
 
 path2 = "C:\\Program Files\\Adobe\\Adobe Photoshop 2020\\Photoshop.exe"
@@ -63,25 +65,18 @@ def execute_cmd(cmd: str):
                "а т++акже отменйать действийа"
         threading.Thread(target=model.load_bath(text))
         threading.Thread(target=(model.va_speak()))
-
     elif cmd == 'open_ps':
         speak = 'аткрыл'
         threading.Thread(target=(os.startfile(path)))
         model.load_bath(speak)
         threading.Thread(target=(model.va_speak()))
-
-    elif cmd == 'holst':
-        keyboard.send('ctrl+n')
-
     elif cmd == 'new_layer':
         speak = 'саздал'
         model.load_bath(speak)
         threading.Thread(target=(model.va_speak()))
         subprocess_setup("Photoshop.Application")
-
     elif cmd == 'CTRLC':
         threading.Thread(target=keyboard.send('ctrl+c'))
-
     elif cmd == 'text_layer':
         try:
             app = subprocess_setup("Photoshop.Application")
@@ -93,13 +88,8 @@ def execute_cmd(cmd: str):
             newTextLayer.TextItem.Contents = "Hello, World!"
         except Exception as e:
             print(e, "ПРОВЕРЬ ДИРЕКТОРИЮ ФОТОШОПА")
-
     elif cmd == 'ctrlz':
-        try:
-            keyboard.send('ctrl+alt+z')
-        except Exception as e:
-            print(e)
-
+        keyboard.send('ctrl+alt+z')
     elif cmd == 'return':
         keyboard.send('ctrl+shift+z')
     elif cmd == 'CTRLV':
@@ -128,11 +118,14 @@ def execute_cmd(cmd: str):
         keyboard.send('ctrl+alt+a')
     elif cmd == 'scale':
         keyboard.send('z')
+    elif cmd == 'holst':
+        pass
+
+    keyboard.send('ctrl+n')
 
 
 if __name__ == "__main__":
     stocks = read_json()
     model = TTSpeaker()
-    model.load_bath( 'привет ... меня  завут  п+око ... Йа тв+ой галсов+ой пам+ошник')
     model.load_bath(stt.va_listen(va_respond))
     model.va_speak()

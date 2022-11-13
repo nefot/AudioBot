@@ -21,7 +21,6 @@ def read_json():
     with open('config_.json', 'r', encoding='utf-8') as file:
         return json.load(file)
 
-
 class TTSpeaker:
     def __init__(self):
         read_json()
@@ -41,7 +40,3 @@ class TTSpeaker:
         sd.play(audio, sample_rate * 1.05)
         time.sleep((len(audio) / sample_rate) + 0.5)
         sd.stop()
-
-# if __name__ == "__main__":
-#     poko = TTSpeaker()
-#     poko.va_speak()
