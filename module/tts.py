@@ -1,4 +1,4 @@
-import json
+import json5
 import torch
 import sounddevice as sd
 import time
@@ -17,15 +17,15 @@ model, _ = torch.hub.load(repo_or_dir='snakers4/silero-models',
 model.to(device)
 
 
-def read_json():
-    with open('config_.json', 'r', encoding='utf-8') as file:
-        return json.load(file)
+def read_json5():
+    with open('config_.json5', 'r', encoding='utf-8') as file:
+        return json5.load(file)
 
 class TTSpeaker:
     def __init__(self):
-        read_json()
+        read_json5()
         self._example_batch = 'привет ... меня  завут  п+око ... Йа тв+ой галсов+ой пам+ошник'
-        self.stocks =  read_json()
+        self.stocks =  read_json5()
         print(f'Голосовой помощник версии {self.stocks["version"]} готов нести службу\n')
 
     def load_bath(self, batch):

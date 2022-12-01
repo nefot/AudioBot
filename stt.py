@@ -1,4 +1,4 @@
-import json
+import json5
 import os.path
 import queue
 import sys
@@ -45,4 +45,4 @@ def va_listen(callback):
         while True:
             data = q.get()
             if rec.AcceptWaveform(data):
-                callback(json.loads(rec.Result())["text"])
+                callback(json5.loads(rec.Result())["text"])

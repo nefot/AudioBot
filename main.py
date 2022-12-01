@@ -1,4 +1,4 @@
-import json
+import json5
 import os
 import threading
 
@@ -14,9 +14,9 @@ path = "C:\\Program Files (x86)\\Photoshop19\\App\\Ps"
 stocks = {}
 
 
-def read_json():
-    with open('config_.json', 'r', encoding='utf-8') as file:
-        return json.load(file)
+def read_json5():
+    with open('config_.json5', 'r', encoding='utf-8') as file:
+        return json5.load(file)
 
 
 def subprocess_setup(process: str):
@@ -125,7 +125,7 @@ def execute_cmd(cmd: str):
 
 
 if __name__ == "__main__":
-    stocks = read_json()
+    stocks = read_json5()
     model = TTSpeaker()
     model.load_bath(stt.va_listen(va_respond))
     model.va_speak()
